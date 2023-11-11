@@ -51,7 +51,7 @@ module Atfox_exTensible_Interface
     parameter SLAVE_BUFFER_SIZE         = 32,           // 4 DoubleWords
     
     parameter POINTER_MASTER_BUF        = $clog2(MASTER_BUFFER_SIZE),
-    parameter POINTER_SLAVE_BUF         = $clog2(MASTER_BUFFER_SIZE)
+    parameter POINTER_SLAVE_BUF         = $clog2(SLAVE_BUFFER_SIZE)
     )
     (
     input                               clk,
@@ -72,11 +72,8 @@ module Atfox_exTensible_Interface
     output  [DEVICE_DATA_WIDTH - 1:0]   device_data_out,
     output  reg                         device_wr_ins,
     output  reg                         device_rd_ins,
-    input                               device_idle,            // Connect to DEVICE_IDLE port
     input                               device_rd_available,    // Buffer of device is available (not full)
     input                               device_wr_available,    // Buffer of device is available (not full)
-    input                               device_rd_idle,         // Read-Device  is IDLE (~transaction_en)
-    input                               device_wr_idle,         // Write-Device is IDLE (~transaction_en)
     input                               rst_n
     );
     
@@ -110,7 +107,7 @@ module Atfox_exTensible_Interface
     assign address_decoder      = (addr_bus_in[ADDR_BUS_WIDTH - 1: ADDR_BUS_WIDTH - CHANNEL_WIDTH] == DEVICE_CHANNEL_ID);
     assign data_bus_out         = (address_decoder) ? data_bus_out_buf  : {64{1'bz}};
     assign buffer_wr_available  = (address_decoder) ? ~full_mbuf        : {1{1'bz}};
-    assign buffer_rd_available  = (address_decoder) ? ~buffer_rd_valid       : {1{1'bz}};
+    assign buffer_rd_available  = (address_decoder) ? buffer_rd_valid       : {1{1'bz}};
     assign wr_req_decode        = (address_decoder) ? wr_req : 1'b0;
     assign rd_req_decode        = (address_decoder) ? rd_req : 1'b0;
     
@@ -273,14 +270,16 @@ module Atfox_exTensible_Interface
     assign index_word_block_rd_cur  = front_pointer_sbuf[POINTER_SLAVE_BUF - 1: POINTER_SLAVE_BUF - WORD_BLOCK_INDEX_W];
     assign index_word_block_rd_next  = front_pointer_sbuf[POINTER_SLAVE_BUF - 1: POINTER_SLAVE_BUF - WORD_BLOCK_INDEX_W] + 1;
     assign offset_word_block = {{(POINTER_SLAVE_BUF - WORD_BLOCK_INDEX_W - 1){1'b0}}, 1'b1};
-    assign full_sbuf = rear_pointer_sbuf == front_pointer_sbuf;
+    assign full_sbuf = (rear_pointer_sbuf + 1) == front_pointer_sbuf;
     always @(posedge clk) begin
         if(!rst_n) begin
             rear_pointer_sbuf <= 1;
             device_rd_ins <= 1;
             word_block_timeout_en <= 0;
-            valid_word_block_sbuf_hi[0:WORD_BLOCK_AMOUNT - 1] <= {{WORD_BLOCK_AMOUNT{1'b0}}};
-            amt_word_block_sbuf[0:WORD_BLOCK_AMOUNT - 1] <= {{WORD_BLOCK_AMOUNT{1'b0}}};
+            for(int i = 0; i < WORD_BLOCK_AMOUNT; i = i + 1) begin
+            valid_word_block_sbuf_hi[i] <= 1'b0;
+            amt_word_block_sbuf[i] <= 1'b0;
+            end
             rd_device_state <= OUT_WORD_BLOCK_STATE;
         end
         else begin
@@ -289,7 +288,7 @@ module Atfox_exTensible_Interface
                     word_block_timeout_en <= 0;
                     if(device_rd_available & !full_sbuf) begin
                         rd_device_state <= IN_WORD_BLOCK_STATE;
-                        valid_word_block_sbuf_hi[index_word_block_wr_cur] <= ~valid_word_block_sbuf_lo[index_word_block_wr_cur];
+                        amt_word_block_sbuf[index_word_block_wr_cur] <= 0; 
                     end
                 end 
                 IN_WORD_BLOCK_STATE: begin
@@ -303,10 +302,16 @@ module Atfox_exTensible_Interface
                             device_rd_ins <= 1;
                             rear_pointer_sbuf <= rear_pointer_sbuf + 1;
                         end 
-                    end if(full_word_block_wr | word_block_timeout_flag) begin
+                    end 
+                    else if (full_word_block_wr) begin
                         rd_device_state <= OUT_WORD_BLOCK_STATE;
-                        rear_pointer_sbuf <= (full_word_block_wr) ? {index_word_block_wr_cur, offset_word_block} : {index_word_block_wr_next, offset_word_block};
-                        word_block_timeout_en <= 1;
+                        rear_pointer_sbuf <= {index_word_block_wr_cur, offset_word_block};
+                        valid_word_block_sbuf_hi[index_word_block_wr_cur - 1] <= ~valid_word_block_sbuf_lo[index_word_block_wr_cur - 1];
+                    end
+                    else if(word_block_timeout_flag) begin
+                        rd_device_state <= OUT_WORD_BLOCK_STATE;
+                        rear_pointer_sbuf <= {index_word_block_wr_next, offset_word_block};
+                        valid_word_block_sbuf_hi[index_word_block_wr_cur] <= ~valid_word_block_sbuf_lo[index_word_block_wr_cur];
                     end  
                     word_block_timeout_en <= (word_block_timeout_flag | full_word_block_wr) ? 0 : !device_rd_available;
                 end 
@@ -360,6 +365,29 @@ module Atfox_exTensible_Interface
         end
     endcase
     buffer_rd_valid_word    = valid_word_block_sbuf[index_word_block_rd_cur];
+    
     buffer_rd_valid_dword   = buffer_rd_valid_word & valid_word_block_sbuf[index_word_block_rd_next];
     end 
 endmodule
+// 
+//  Atfox_exTensible_Interface
+//        #(
+//        ) Atfox_exTensible_Interface_UART (
+//        .clk(clk),
+//        .data_bus_in(),
+//        .data_bus_out(),
+//        .addr_bus_in(),
+//        .buffer_rd_available(),
+//        .buffer_wr_available(),
+//        .rd_req(),
+//        .wr_req(),
+//        .data_type_encode(),
+//        .device_data_in(),
+//        .device_data_out(),
+//        .device_wr_ins(),
+//        .device_rd_ins(),
+//        .device_rd_available(),
+//        .device_wr_available(),
+        
+//        .rst_n(rst_n)
+//        );

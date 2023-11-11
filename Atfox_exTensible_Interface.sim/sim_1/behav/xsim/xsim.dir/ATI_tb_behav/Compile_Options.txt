@@ -1,0 +1,1 @@
+-wto "e03f3e6503be4f4ca246bd9212ffba19" --incr --debug "typical" --relax --mt "2" -L "xil_defaultlib" -L "uvm" -L "unisims_ver" -L "unimacro_ver" -L "secureip" --snapshot "ATI_tb_behav" "xil_defaultlib.ATI_tb" "xil_defaultlib.glbl" -log "elaborate.log" 
