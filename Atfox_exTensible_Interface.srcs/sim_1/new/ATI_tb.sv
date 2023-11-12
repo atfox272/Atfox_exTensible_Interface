@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
-
+//`define READ_REQUEST_CASE
+`define WRITE_REQUEST_CASE
 module ATI_tb#(
     // SYSTEM BUS parameter
     parameter DATA_BUS_WIDTH            = 64,
@@ -51,7 +52,7 @@ module ATI_tb#(
     Atfox_exTensible_Interface
         #(
         .DEVICE_CHANNEL_ID(2'b00),
-        .PACKET_TIMEOUT(10000)
+        .PACKET_TIMEOUT(1000)
         ) Atfox_exTensible_Interface_UART (
         .clk(clk),
         .data_bus_in(data_bus_in),
@@ -79,6 +80,7 @@ module ATI_tb#(
     wire TX_1;
     uart_peripheral 
         #(
+        .FIFO_DEPTH(4),
         .INTERNAL_CLOCK(INTERNAL_CLOCK)
         )uart_peripheral_1(
         .clk(clk),
@@ -151,11 +153,11 @@ module ATI_tb#(
     initial begin
         forever #1 clk <= ~clk;
     end
-    
+    `ifdef READ_REQUEST_CASE
     initial begin
         #11;
         
-        for(int i = 0; i < 10; i = i + 1) begin
+        for(int i = 0; i < 40; i = i + 1) begin
         #1;
         data_in_2 <= 8'hff - i;
         #1 TX_use_2 <= 1;
@@ -163,7 +165,29 @@ module ATI_tb#(
         end 
     end
     initial begin
-        #2000;
+    
+        #1500;
+        rd_req <= 0;
+        #2 rd_req <= 1;
+        #2 rd_req <= 0;
+        
+        #2500;
+        rd_req <= 0;
+        #2 rd_req <= 1;
+        #2 rd_req <= 0;
+    end
+    `endif
+    
+    `ifdef WRITE_REQUEST_CASE
+    initial begin
+    #11;
+    data_bus_in <= 64'h0001020304050607;
+    #2 wr_req <= 1;
+    #2 wr_req <= 0;
+    end
+    `endif
+    initial begin
+        #20000;
         $stop;
         #2000;
         $stop;
