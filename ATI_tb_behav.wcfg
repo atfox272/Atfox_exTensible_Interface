@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="25100001fs"></ZoomEndTime>
-      <Cursor1Time time="4006000fs"></Cursor1Time>
+      <ZoomEndTime time="276001fs"></ZoomEndTime>
+      <Cursor1Time time="19000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="186"></NameColumnWidth>
+      <NameColumnWidth column_width="181"></NameColumnWidth>
       <ValueColumnWidth column_width="72"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="33" />
+   <WVObjectSize size="22" />
    <wvobject fp_name="/ATI_tb/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -104,52 +104,8 @@
       <obj_property name="ElementShortName">RX_flag_2</obj_property>
       <obj_property name="ObjectShortName">RX_flag_2</obj_property>
    </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/full_word_block_wr" type="logic">
-      <obj_property name="ElementShortName">full_word_block_wr</obj_property>
-      <obj_property name="ObjectShortName">full_word_block_wr</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/rd_device_state" type="array">
-      <obj_property name="ElementShortName">rd_device_state[1:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_device_state[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/valid_word_block_sbuf" type="array">
-      <obj_property name="ElementShortName">valid_word_block_sbuf[0:7]</obj_property>
-      <obj_property name="ObjectShortName">valid_word_block_sbuf[0:7]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/buffer_rd_valid_word" type="logic">
-      <obj_property name="ElementShortName">buffer_rd_valid_word</obj_property>
-      <obj_property name="ObjectShortName">buffer_rd_valid_word</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/buffer_rd_valid" type="logic">
-      <obj_property name="ElementShortName">buffer_rd_valid</obj_property>
-      <obj_property name="ObjectShortName">buffer_rd_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/rear_pointer_sbuf" type="array">
-      <obj_property name="ElementShortName">rear_pointer_sbuf[4:0]</obj_property>
-      <obj_property name="ObjectShortName">rear_pointer_sbuf[4:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/front_pointer_sbuf" type="array">
-      <obj_property name="ElementShortName">front_pointer_sbuf[4:0]</obj_property>
-      <obj_property name="ObjectShortName">front_pointer_sbuf[4:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/buffer_rd_valid_dword" type="logic">
-      <obj_property name="ElementShortName">buffer_rd_valid_dword</obj_property>
-      <obj_property name="ObjectShortName">buffer_rd_valid_dword</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/slave_buffer" type="array">
-      <obj_property name="ElementShortName">slave_buffer[0:31][7:0]</obj_property>
-      <obj_property name="ObjectShortName">slave_buffer[0:31][7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/full_sbuf" type="logic">
-      <obj_property name="ElementShortName">full_sbuf</obj_property>
-      <obj_property name="ObjectShortName">full_sbuf</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/index_word_block_wr_cur" type="array">
-      <obj_property name="ElementShortName">index_word_block_wr_cur[2:0]</obj_property>
-      <obj_property name="ObjectShortName">index_word_block_wr_cur[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/index_word_block_rd_cur" type="array">
-      <obj_property name="ElementShortName">index_word_block_rd_cur[2:0]</obj_property>
-      <obj_property name="ObjectShortName">index_word_block_rd_cur[2:0]</obj_property>
+   <wvobject fp_name="/ATI_tb/registers_wire" type="array">
+      <obj_property name="ElementShortName">registers_wire[0:1023][7:0]</obj_property>
+      <obj_property name="ObjectShortName">registers_wire[0:1023][7:0]</obj_property>
    </wvobject>
 </wave_config>

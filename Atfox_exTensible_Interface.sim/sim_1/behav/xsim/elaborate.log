@@ -4,7 +4,9 @@ Running: L:/Application/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe -wt
 Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 10 for port 'limit_counter' [L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.srcs/sources_1/new/Atfox_exTensible_Interface.sv:148]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 10 for port 'limit_counter' [L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.srcs/sources_1/new/Atfox_exTensible_Interface.sv:161]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 10 for port 'addr_rd_1' [L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.srcs/sim_1/new/ATI_tb.sv:193]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 10 for port 'addr_wr' [L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.srcs/sim_1/new/ATI_tb.sv:195]
 Completed static elaboration
 Starting simulation data flow analysis
 WARNING: [XSIM 43-4099] "L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.srcs/sources_1/imports/RF_Transceiver-main/fifo_module.v" Line 21. Module fifo_module(DEPTH=4) doesn't have a timescale but at least one module in design has a timescale.
@@ -16,7 +18,7 @@ WARNING: [XSIM 43-4099] "L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible
 Completed simulation data flow analysis
 Time Resolution for simulation is 1ps
 Compiling module xil_defaultlib.real_time(MAX_COUNTER=1000)
-Compiling module xil_defaultlib.Atfox_exTensible_Interface(PACKE...
+Compiling module xil_defaultlib.Atfox_exTensible_Interface(DEVIC...
 Compiling module xil_defaultlib.TX_controller_default
 Compiling module xil_defaultlib.RX_controller_default
 Compiling module xil_defaultlib.baudrate_generator(INTERNAL_CLOC...
@@ -25,6 +27,8 @@ Compiling module xil_defaultlib.fifo_module(DEPTH=4)
 Compiling module xil_defaultlib.uart_peripheral(INTERNAL_CLOCK=9...
 Compiling module xil_defaultlib.fifo_module(DEPTH=1024)
 Compiling module xil_defaultlib.uart_peripheral(INTERNAL_CLOCK=9...
+Compiling module xil_defaultlib.Atfox_exTensible_Interface(DEVIC...
+Compiling module xil_defaultlib.ram_default
 Compiling module xil_defaultlib.ATI_tb
 Compiling module xil_defaultlib.glbl
 Built simulation snapshot ATI_tb_behav

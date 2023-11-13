@@ -31,7 +31,10 @@ module ATI_tb#(
     reg     [DATA_BUS_WIDTH - 1:0]      data_bus_in;
     wire    [DATA_BUS_WIDTH - 1:0]      data_bus_out;
     // ADDRESS_BUS
-    reg [ADDR_BUS_WIDTH - 1:0]          addr_bus_in;
+    wire[ADDR_BUS_WIDTH - 1:0]                              addr_bus_in;
+    reg [ADDR_BUS_WIDTH - 1:ADDR_BUS_WIDTH - CHANNEL_WIDTH] addr_bus_channel;
+    reg [ADDR_BUS_WIDTH - CHANNEL_WIDTH - 1:0]              addr_bus_address;
+    assign addr_bus_in = {addr_bus_channel, addr_bus_address};
     // CONTROL_BUS
     wire                                buffer_rd_available;
     wire                                buffer_wr_available;
@@ -51,8 +54,9 @@ module ATI_tb#(
     
     Atfox_exTensible_Interface
         #(
-        .DEVICE_CHANNEL_ID(2'b00),
-        .PACKET_TIMEOUT(1000)
+        .DEVICE_CHANNEL_ID(2'b01),
+        .PACKET_TIMEOUT(1000),
+        .DEVICE_TYPE(1) // Memory type
         ) Atfox_exTensible_Interface_UART (
         .clk(clk),
         .data_bus_in(data_bus_in),
@@ -136,11 +140,77 @@ module ATI_tb#(
         );        
     assign RX_1 = TX_2;
     assign RX_2 = TX_1;
-    
+    localparam ADDR_DEPTH = 1024;
+    wire [64 - 1:0] device_data_in_ram;
+    wire [64 - 1:0] device_data_out_ram;
+    wire device_wr_ins_ram;
+    wire device_rd_ins_ram;
+    wire device_rd_available_ram;
+    wire device_wr_available_ram;
+    wire [64 - 1:0] device_addr_rd_ram;
+    wire [64 - 1:0] device_addr_wr_ram;
+    wire [1:0] device_data_type_rd_ram;
+    wire [1:0] device_data_type_wr_ram;
+    wire [DATA_WIDTH - 1:0] registers_wire [0: ADDR_DEPTH - 1];
+    Atfox_exTensible_Interface
+        #(
+        .DEVICE_CHANNEL_ID(2'b00),
+        .DEVICE_DATA_WIDTH(64),
+        .DEVICE_TYPE(0) // Memory type
+        ) Atfox_exTensible_Interface_MEMORY (
+        .clk(clk),
+        .data_bus_in(data_bus_in),
+        .data_bus_out(data_bus_out),
+        .addr_bus_in(addr_bus_in),
+        .buffer_rd_available(buffer_rd_available),
+        .buffer_wr_available(buffer_wr_available),
+        .rd_req(rd_req),
+        .wr_req(wr_req),
+        .data_type_encode(data_type_encode),
+        .device_data_in(device_data_in_ram),
+        .device_data_out(device_data_out_ram),
+        .device_wr_ins(device_wr_ins_ram),
+        .device_rd_ins(device_rd_ins_ram),
+        .device_rd_available(device_rd_available_ram),
+        .device_wr_available(device_wr_available_ram),
+        .device_addr_rd(device_addr_rd_ram),
+        .device_addr_wr(device_addr_wr_ram),
+        .device_data_type_rd(device_data_type_rd_ram),
+        .device_data_type_wr(device_data_type_wr_ram),
+        .rst_n(rst_n)
+        );
+    ram 
+        #(
+        .ADDR_DEPTH(ADDR_DEPTH)
+        ) data_memory (
+        .clk(clk),
+        .data_bus_wr(device_data_out_ram),
+        .data_bus_rd_1(device_data_in_ram),
+        .data_bus_rd_2(),
+        .data_type_rd_1(device_data_type_rd_ram),
+        .data_type_rd_2(),
+        .data_type_wr(device_data_type_wr_ram),
+        .addr_rd_1(device_addr_rd_ram),
+        .addr_rd_2(),
+        .addr_wr(device_addr_wr_ram),
+        .rd_en_1(device_rd_ins_ram),
+        .rd_en_2(),
+        .wr_ins(device_wr_ins_ram),
+        .invalid_rd_flag_1(),
+        .invalid_rd_flag_2(),
+        .invalid_wr_flag(),
+        .rd_idle_1(device_rd_available_ram),
+        .rd_idle_2(),
+        .wr_idle(device_wr_available_ram),
+        .reserved_registers(),
+        .registers_wire(registers_wire),
+        .rst_n(rst_n)
+        );    
     initial begin
         clk <= 0;
         data_bus_in <= 0;
-        addr_bus_in <= 0;
+        addr_bus_channel <= 0;
+        addr_bus_address <= 0;
         rd_req <= 0;
         wr_req <= 0;
         data_type_encode <= 0;
@@ -157,12 +227,20 @@ module ATI_tb#(
     initial begin
         #11;
         
-        for(int i = 0; i < 40; i = i + 1) begin
+        for(int i = 0; i < 20; i = i + 1) begin
         #1;
         data_in_2 <= 8'hff - i;
         #1 TX_use_2 <= 1;
         #2 TX_use_2 <= 0;
         end 
+        
+        #6000;
+        for(int i = 0; i < 10; i = i + 1) begin
+        #1;
+        data_in_2 <= i;
+        #1 TX_use_2 <= 1;
+        #2 TX_use_2 <= 0;
+        end
     end
     initial begin
     
@@ -182,8 +260,26 @@ module ATI_tb#(
     initial begin
     #11;
     data_bus_in <= 64'h0001020304050607;
+    data_type_encode <= 2;
     #2 wr_req <= 1;
     #2 wr_req <= 0;
+    
+    #10;
+    addr_bus_channel <= 0;
+    addr_bus_address <= 1;
+    data_type_encode <= 0;
+    #2 rd_req <= 0;
+    #2 rd_req <= 1;
+    #2 rd_req <= 0;
+    
+    #11;
+    addr_bus_channel <= 2'b01;
+    addr_bus_address <= 0;
+    data_bus_in <= 64'h8899aabbccddeeff;
+    data_type_encode <= 2;
+    #2 wr_req <= 1;
+    #2 wr_req <= 0;
+    
     end
     `endif
     initial begin

@@ -43,6 +43,10 @@ module Atfox_exTensible_Interface
     parameter DOUBLEWORD_TYPE_ENCODE    = 2,
     // Device parameter 
     parameter DEVICE_DATA_WIDTH         = 8,
+    parameter MEMORY_TYPE_ENCODE        = 0,
+    parameter PERIPHERAL_TYPE_ENCODE    = 1,
+    parameter GPIO_TYPE_ENCODE          = 2,
+    parameter DEVICE_TYPE               = PERIPHERAL_TYPE_ENCODE,
     
     // DEEP CONFIGURATION
     parameter INTERNAL_CLOCK            = 125000000,
@@ -68,18 +72,27 @@ module Atfox_exTensible_Interface
     input                               wr_req,
     input  [DATA_TYPE_WIDTH - 1:0]      data_type_encode,      // Doubleword - Word - Byte
     // DEVICE interface ////////////////////////
-    input   [DEVICE_DATA_WIDTH - 1:0]   device_data_in,
-    output  [DEVICE_DATA_WIDTH - 1:0]   device_data_out,
-    output  reg                         device_wr_ins,
-    output  reg                         device_rd_ins,
+    input  [DEVICE_DATA_WIDTH - 1:0]    device_data_in,
+    output [DEVICE_DATA_WIDTH - 1:0]    device_data_out,
+    output  logic                       device_wr_ins,
+    output  logic                       device_rd_ins,
     input                               device_rd_available,    // Buffer of device is available (not full)
     input                               device_wr_available,    // Buffer of device is available (not full)
+    /* For Memory */
+    output [ADDR_BUS_WIDTH - 1:0]       device_addr_rd,
+    output [ADDR_BUS_WIDTH - 1:0]       device_addr_wr,
+    output [DATA_TYPE_WIDTH - 1:0]      device_data_type_rd,      // Doubleword - Word - Byte
+    output [DATA_TYPE_WIDTH - 1:0]      device_data_type_wr,      // Doubleword - Word - Byte
     input                               rst_n
     );
     
     localparam BYTE_WIDTH                   = 8;
     localparam WORD_WIDTH                   = 32;
     localparam DOUBLEWORD_WIDTH             = 64;
+    
+    wire address_decoder = (addr_bus_in[ADDR_BUS_WIDTH - 1: ADDR_BUS_WIDTH - CHANNEL_WIDTH] == DEVICE_CHANNEL_ID);
+    
+    if(DEVICE_TYPE == PERIPHERAL_TYPE_ENCODE) begin     : PERIPHERAL_BLOCK
     
     localparam OUT_WORD_BLOCK_STATE         = 0;    
     localparam IN_WORD_BLOCK_STATE          = 1;   
@@ -114,12 +127,12 @@ module Atfox_exTensible_Interface
     logic[DATA_BUS_WIDTH - 1:0]         data_bus_out_buf;
     
     
-    wire[WORD_WIDTH - 1:0]                              word_block_sbuf         [0:WORD_BLOCK_AMOUNT - 1];
-    reg [BYTE_WIDTH - 1:0]                              amt_word_block_sbuf     [0:WORD_BLOCK_AMOUNT - 1];
+    wire [WORD_WIDTH - 1:0]                             word_block_sbuf         [0:WORD_BLOCK_AMOUNT - 1];
+    reg  [BYTE_WIDTH - 1:0]                             amt_word_block_sbuf     [0:WORD_BLOCK_AMOUNT - 1];
     wire                                                valid_word_block_sbuf   [0:WORD_BLOCK_AMOUNT - 1];
     reg                                                 valid_word_block_sbuf_hi[0:WORD_BLOCK_AMOUNT - 1];
     reg                                                 valid_word_block_sbuf_lo[0:WORD_BLOCK_AMOUNT - 1];
-    reg [1:0]                                           rd_device_state;
+    reg  [1:0]                                          rd_device_state;
     wire [WORD_BLOCK_INDEX_W - 1:0]                     index_word_block_wr_cur;
     wire [WORD_BLOCK_INDEX_W - 1:0]                     index_word_block_wr_next;
     wire [WORD_BLOCK_INDEX_W - 1:0]                     index_word_block_wr_prev;
@@ -151,7 +164,6 @@ module Atfox_exTensible_Interface
         );
     
     // Address decoder   
-    assign address_decoder      = (addr_bus_in[ADDR_BUS_WIDTH - 1: ADDR_BUS_WIDTH - CHANNEL_WIDTH] == DEVICE_CHANNEL_ID);
     assign data_bus_out         = (address_decoder) ? data_bus_out_buf  : {64{1'bz}};
     assign buffer_wr_available  = (address_decoder) ? ~full_mbuf        : {1{1'bz}};
     assign buffer_rd_available  = (address_decoder) ? buffer_rd_valid   : {1{1'bz}};
@@ -165,7 +177,7 @@ module Atfox_exTensible_Interface
         if(!rst_n) begin
             rear_pointer_mbuf <= 0;
         end 
-        else if(wr_req) begin
+        else if(wr_req_decode) begin
             master_buffer[rear_pointer_mbuf] <= data_bus_in;
             data_type_mbuf[rear_pointer_mbuf] <= data_type_encode;
             rear_pointer_mbuf <= rear_pointer_mbuf + 1;
@@ -174,11 +186,13 @@ module Atfox_exTensible_Interface
     
     logic[DEVICE_DATA_WIDTH - 1:0]      block_mux;
     reg  [BLOCK_INDEX_WIDTH - 1:0]      block_index;
+    logic[BLOCK_INDEX_WIDTH - 1:0]      block_index_limit;  // 1 - 4 - 8 bytes 
     wire [DATA_BUS_WIDTH - 1:0]         front_element_mbuf;
     
     assign front_element_mbuf = master_buffer[front_pointer_mbuf];
     assign device_data_out = block_mux;
     always_comb begin
+    
     case(block_index)
         0: block_mux = front_element_mbuf[7:0];
         1: block_mux = front_element_mbuf[15:8];
@@ -190,6 +204,21 @@ module Atfox_exTensible_Interface
         7: block_mux = front_element_mbuf[63:56];
         default: block_mux = 8'h00;
     endcase
+    
+    case(data_type_mbuf[front_pointer_mbuf])
+        BYTE_TYPE_ENCODE: begin
+            block_index_limit = BYTE_WIDTH / BYTE_WIDTH - 1;
+        end 
+        WORD_TYPE_ENCODE: begin
+            block_index_limit = WORD_WIDTH / BYTE_WIDTH - 1;
+        end
+        DOUBLEWORD_TYPE_ENCODE: begin
+            block_index_limit = DOUBLEWORD_WIDTH / BYTE_WIDTH - 1;
+        end
+        default: begin
+            block_index_limit = BYTE_WIDTH / BYTE_WIDTH - 1;
+        end
+    endcase
     end 
     
     always @(posedge clk) begin
@@ -200,13 +229,18 @@ module Atfox_exTensible_Interface
         end
         else if(~empty_mbuf & device_wr_available) begin
             if(device_wr_ins) begin                 // Sample 
-                block_index <= block_index + 1;
-                front_pointer_mbuf <= (block_index == 7) ? front_pointer_mbuf + 1 : front_pointer_mbuf;
-                device_wr_ins <= 0;
+                if(block_index == block_index_limit) begin
+                    block_index <= 0;
+                    front_pointer_mbuf <= front_pointer_mbuf + 1;
+                end
+                else begin
+                    block_index <= block_index + 1;
+                end
             end
             else begin                              // Sending
-                device_wr_ins <= 1;
+
             end
+            device_wr_ins <= ~device_wr_ins;
         end 
     end
     
@@ -336,7 +370,7 @@ module Atfox_exTensible_Interface
         if(!rst_n) begin
             front_pointer_sbuf <= 1;
         end 
-        else if(rd_req & buffer_rd_valid) begin
+        else if(rd_req_decode & buffer_rd_valid) begin
             front_pointer_sbuf <= front_pointer_sbuf_next;
         end 
     end
@@ -345,7 +379,7 @@ module Atfox_exTensible_Interface
         if(!rst_n) begin
             valid_word_block_sbuf_lo[i] <= 1'b0;
         end
-        else if(rd_req & buffer_rd_valid) begin
+        else if(rd_req_decode & buffer_rd_valid) begin
             if(((data_type_encode == BYTE_TYPE_ENCODE | data_type_encode == WORD_TYPE_ENCODE) & index_word_block_rd_cur == i) | data_type_encode == DOUBLEWORD_TYPE_ENCODE & (index_word_block_rd_next == i)) begin
                 valid_word_block_sbuf_lo[i] <= valid_word_block_sbuf_hi[i];
             end
@@ -381,10 +415,38 @@ module Atfox_exTensible_Interface
     endcase
     end 
     
+    end 
+    
+    else if(DEVICE_TYPE == MEMORY_TYPE_ENCODE) begin    : MEMORY_BLOCK
+        /* For 1wr-1rd  Memory */
+        assign data_bus_out         = (address_decoder) ? device_data_in : {DATA_BUS_WIDTH{1'bz}};
+        assign buffer_rd_available  = (address_decoder) ? device_rd_available : {1{1'bz}};
+        assign buffer_wr_available  = (address_decoder) ? device_wr_available : {1{1'bz}};
+        assign device_addr_rd       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
+        assign device_addr_wr       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
+        assign device_rd_ins        = (address_decoder) ? rd_req : 1'b0;
+        assign device_wr_ins        = (address_decoder) ? wr_req : 1'b0;
+        assign device_data_type_rd  = data_type_encode;
+        assign device_data_type_wr  = data_type_encode;
+        assign device_data_out      = data_bus_in;
+    end 
+    
+    else if(DEVICE_TYPE == GPIO_TYPE_ENCODE) begin      : GPIO_BLOCK
+        assign data_bus_out         = (address_decoder) ? device_data_in : {DATA_BUS_WIDTH{1'bz}};
+        assign device_addr_rd       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
+        assign buffer_rd_available  = 1'b1;
+        assign buffer_wr_available  = 1'b1;
+        assign device_addr_wr       = 0;
+        assign device_rd_ins        = 0;
+        assign device_wr_ins        = 0;
+        assign device_data_type     = 0;
+        assign device_data_out      = 0;
+    end 
 endmodule
 // 
 //  Atfox_exTensible_Interface
 //        #(
+//        .DEVICE_CHANNEL_ID()
 //        ) Atfox_exTensible_Interface_UART (
 //        .clk(clk),
 //        .data_bus_in(),
@@ -401,5 +463,8 @@ endmodule
 //        .device_rd_ins(),
 //        .device_rd_available(),
 //        .device_wr_available(),
+//        .device_addr_rd(),
+//        .device_addr_wr(),
+//        .device_data_type(),
 //        .rst_n(rst_n)
 //        );
