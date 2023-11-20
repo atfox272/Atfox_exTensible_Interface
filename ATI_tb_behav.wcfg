@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="276001fs"></ZoomEndTime>
-      <Cursor1Time time="19000fs"></Cursor1Time>
+      <ZoomEndTime time="2530001fs"></ZoomEndTime>
+      <Cursor1Time time="410000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="181"></NameColumnWidth>
+      <NameColumnWidth column_width="176"></NameColumnWidth>
       <ValueColumnWidth column_width="72"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="22" />
+   <WVObjectSize size="23" />
    <wvobject fp_name="/ATI_tb/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -107,5 +107,9 @@
    <wvobject fp_name="/ATI_tb/registers_wire" type="array">
       <obj_property name="ElementShortName">registers_wire[0:1023][7:0]</obj_property>
       <obj_property name="ObjectShortName">registers_wire[0:1023][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ATI_tb/Atfox_exTensible_Interface_UART/\INTERFACE_PERP_BLOCK.slave_buffer " type="array">
+      <obj_property name="ElementShortName">\INTERFACE_PERP_BLOCK.slave_buffer [0:31][7:0]</obj_property>
+      <obj_property name="ObjectShortName">\INTERFACE_PERP_BLOCK.slave_buffer [0:31][7:0]</obj_property>
    </wvobject>
 </wave_config>

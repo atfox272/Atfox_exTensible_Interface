@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
-//`define READ_REQUEST_CASE
-`define WRITE_REQUEST_CASE
+`define READ_REQUEST_CASE
+//`define WRITE_REQUEST_CASE
 module ATI_tb#(
     // SYSTEM BUS parameter
     parameter DATA_BUS_WIDTH            = 64,
@@ -54,9 +54,9 @@ module ATI_tb#(
     
     Atfox_exTensible_Interface
         #(
-        .DEVICE_CHANNEL_ID(2'b01),
+        .CHANNEL_ID(2'b01),
         .PACKET_TIMEOUT(1000),
-        .DEVICE_TYPE(1) // Memory type
+        .INTERFACE_TYPE(1) 
         ) Atfox_exTensible_Interface_UART (
         .clk(clk),
         .data_bus_in(data_bus_in),
@@ -154,9 +154,9 @@ module ATI_tb#(
     wire [DATA_WIDTH - 1:0] registers_wire [0: ADDR_DEPTH - 1];
     Atfox_exTensible_Interface
         #(
-        .DEVICE_CHANNEL_ID(2'b00),
+        .CHANNEL_ID(2'b00),
         .DEVICE_DATA_WIDTH(64),
-        .DEVICE_TYPE(0) // Memory type
+        .INTERFACE_TYPE(0) // Memory type
         ) Atfox_exTensible_Interface_MEMORY (
         .clk(clk),
         .data_bus_in(data_bus_in),
@@ -227,6 +227,7 @@ module ATI_tb#(
     initial begin
         #11;
         
+        addr_bus_channel <= 2'b01;
         for(int i = 0; i < 20; i = i + 1) begin
         #1;
         data_in_2 <= 8'hff - i;

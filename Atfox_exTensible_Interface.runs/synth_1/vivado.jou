@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue Nov 14 15:08:37 2023
+# Process ID: 31292
+# Current directory: L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.runs/synth_1
+# Command line: vivado.exe -log Atfox_exTensible_Interface.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source Atfox_exTensible_Interface.tcl
+# Log file: L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.runs/synth_1/Atfox_exTensible_Interface.vds
+# Journal file: L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source Atfox_exTensible_Interface.tcl -notrace

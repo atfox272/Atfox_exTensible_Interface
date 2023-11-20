@@ -1,0 +1,423 @@
+
+*** Running vivado
+    with args -log Atfox_exTensible_Interface.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source Atfox_exTensible_Interface.tcl -notrace
+
+
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source Atfox_exTensible_Interface.tcl -notrace
+Command: link_design -top Atfox_exTensible_Interface -part xc7z020clg400-1
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 1162.145 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 49 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2020.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1162.145 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 13 instances were transformed.
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 2 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 11 instances
+
+6 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:06 ; elapsed = 00:00:18 . Memory (MB): peak = 1162.145 ; gain = 0.000
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port buffer_rd_available expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port buffer_wr_available expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[0] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[10] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[11] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[12] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[13] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[14] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[15] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[16] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[17] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[18] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[19] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[1] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[20] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[21] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[22] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[23] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[24] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[25] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[26] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[27] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[28] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[29] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[2] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[30] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[31] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[32] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[33] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[34] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[35] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[36] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[37] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[38] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[39] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[3] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[40] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[41] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[42] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[43] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[44] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[45] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[46] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[47] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[48] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[49] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[4] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[50] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[51] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[52] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[53] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[54] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[55] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[56] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[57] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[58] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[59] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[5] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[60] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[61] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[62] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[63] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[6] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[7] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[8] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[9] expects both input and output buffering but the buffers are incomplete.
+INFO: [Project 1-461] DRC finished with 0 Errors, 66 Warnings
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:02 . Memory (MB): peak = 1162.145 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 98b8acb4
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:16 . Memory (MB): peak = 1639.801 ; gain = 477.656
+
+Starting Logic Optimization Task
+
+Phase 1 Retarget
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 1 Retarget | Checksum: b63b5399
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.194 . Memory (MB): peak = 1859.750 ; gain = 0.000
+INFO: [Opt 31-389] Phase Retarget created 0 cells and removed 1 cells
+
+Phase 2 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 2 Constant propagation | Checksum: b63b5399
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.201 . Memory (MB): peak = 1859.750 ; gain = 0.000
+INFO: [Opt 31-389] Phase Constant propagation created 0 cells and removed 0 cells
+
+Phase 3 Sweep
+Phase 3 Sweep | Checksum: 116fce0f3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.219 . Memory (MB): peak = 1859.750 ; gain = 0.000
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 0 cells
+
+Phase 4 BUFG optimization
+Phase 4 BUFG optimization | Checksum: 116fce0f3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.248 . Memory (MB): peak = 1859.750 ; gain = 0.000
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 5 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 5 Shift Register Optimization | Checksum: 116fce0f3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.253 . Memory (MB): peak = 1859.750 ; gain = 0.000
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 6 Post Processing Netlist
+Phase 6 Post Processing Netlist | Checksum: 116fce0f3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.258 . Memory (MB): peak = 1859.750 ; gain = 0.000
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |               0  |               1  |                                              0  |
+|  Constant propagation         |               0  |               0  |                                              0  |
+|  Sweep                        |               0  |               0  |                                              0  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                              0  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1859.750 ; gain = 0.000
+Ending Logic Optimization Task | Checksum: 81123b7c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.278 . Memory (MB): peak = 1859.750 ; gain = 0.000
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+Ending Power Optimization Task | Checksum: 81123b7c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 1859.750 ; gain = 0.000
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 81123b7c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1859.750 ; gain = 0.000
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1859.750 ; gain = 0.000
+Ending Netlist Obfuscation Task | Checksum: 81123b7c
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1859.750 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+23 Infos, 66 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:24 . Memory (MB): peak = 1859.750 ; gain = 697.605
+INFO: [Common 17-1381] The checkpoint 'L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.runs/impl_1/Atfox_exTensible_Interface_opt.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_drc -file Atfox_exTensible_Interface_drc_opted.rpt -pb Atfox_exTensible_Interface_drc_opted.pb -rpx Atfox_exTensible_Interface_drc_opted.rpx
+Command: report_drc -file Atfox_exTensible_Interface_drc_opted.rpt -pb Atfox_exTensible_Interface_drc_opted.pb -rpx Atfox_exTensible_Interface_drc_opted.rpx
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'L:/Application/Xilinx/Vivado/2020.2/data/ip'.
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Coretcl 2-168] The results of DRC are in file L:/Projects/Atfox_exTensible_Interface/Atfox_exTensible_Interface.runs/impl_1/Atfox_exTensible_Interface_drc_opted.rpt.
+report_drc completed successfully
+report_drc: Time (s): cpu = 00:00:02 ; elapsed = 00:00:07 . Memory (MB): peak = 1902.816 ; gain = 43.066
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7z020'
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port buffer_rd_available expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port buffer_wr_available expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[0] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[10] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[11] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[12] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[13] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[14] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[15] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[16] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[17] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[18] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[19] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[1] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[20] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[21] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[22] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[23] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[24] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[25] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[26] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[27] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[28] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[29] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[2] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[30] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[31] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[32] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[33] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[34] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[35] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[36] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[37] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[38] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[39] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[3] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[40] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[41] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[42] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[43] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[44] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[45] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[46] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[47] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[48] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[49] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[4] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[50] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[51] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[52] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[53] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[54] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[55] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[56] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[57] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[58] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[59] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[5] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[60] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[61] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[62] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[63] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[6] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[7] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[8] expects both input and output buffering but the buffers are incomplete.
+WARNING: [DRC RPBF-3] IO port buffering is incomplete: Device port data_bus_out[9] expects both input and output buffering but the buffers are incomplete.
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors, 66 Warnings
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+Starting Placer Task
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 2 CPUs
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1903.723 ; gain = 0.000
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 13e4a0ca
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 1903.723 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1903.723 ; gain = 0.000
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+ERROR: [Place 30-415] IO Placement failed due to overutilization. This design contains 290 I/O ports
+ while the target  device: 7z020 package: clg400, contains only 255 available user I/O. The target device has 255 usable I/O pins of which 0 are already occupied by user-locked I/Os.
+ To rectify this issue:
+ 1. Ensure you are targeting the correct device and package.  Select a larger device or different package if necessary.
+ 2. Check the top-level ports of the design to ensure the correct number of ports are specified.
+ 3. Consider design changes to reduce the number of I/Os necessary.
+ERROR: [Place 30-68] Instance addr_bus_in_IBUF[62]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance addr_bus_in_IBUF[63]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance buffer_rd_available_OBUFT_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance buffer_wr_available_OBUFT_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance clk_IBUF_BUFG_inst (BUFG) is not placed
+ERROR: [Place 30-68] Instance clk_IBUF_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[0]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[10]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[11]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[12]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[13]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[14]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[15]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[16]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[17]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[18]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[19]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[1]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[20]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[21]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[22]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[23]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[24]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[25]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[26]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[27]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[28]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[29]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[2]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[30]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[31]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[32]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[33]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[34]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[35]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[36]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[37]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[38]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[39]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[3]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[40]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[41]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[42]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[43]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[44]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[45]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[46]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[47]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[48]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[49]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[4]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[50]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[51]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[52]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[53]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[54]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[55]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[56]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[57]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[58]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[59]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[5]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[60]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[61]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[62]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[63]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[6]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[7]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[8]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_in_IBUF[9]_inst (IBUF) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[0]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[10]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[11]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[12]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[13]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[14]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[15]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[16]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[17]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[18]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[19]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[1]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[20]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[21]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[22]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[23]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[24]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[25]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[26]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[27]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[28]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[29]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[2]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[30]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[31]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[32]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[33]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[34]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[35]_inst (OBUFT) is not placed
+ERROR: [Place 30-68] Instance data_bus_out_OBUFT[36]_inst (OBUFT) is not placed
+INFO: [Common 17-14] Message 'Place 30-68' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: cf35e317
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.776 . Memory (MB): peak = 1903.723 ; gain = 0.000
+Phase 1 Placer Initialization | Checksum: cf35e317
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.778 . Memory (MB): peak = 1903.723 ; gain = 0.000
+ERROR: [Place 30-99] Placer failed with error: 'IO Clock Placer failed'
+Please review all ERROR, CRITICAL WARNING, and WARNING messages during placement to understand the cause for failure.
+Ending Placer Task | Checksum: cf35e317
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.780 . Memory (MB): peak = 1903.723 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+41 Infos, 132 Warnings, 0 Critical Warnings and 103 Errors encountered.
+place_design failed
+ERROR: [Common 17-69] Command failed: Placer could not place all instances
+INFO: [Common 17-206] Exiting Vivado at Tue Nov 14 15:11:16 2023...
