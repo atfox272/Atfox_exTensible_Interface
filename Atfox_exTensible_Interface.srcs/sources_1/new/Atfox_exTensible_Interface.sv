@@ -35,21 +35,29 @@ module Atfox_exTensible_Interface
     // SYSTEM BUS parameter
     parameter DATA_BUS_WIDTH            = 64,
     parameter ADDR_BUS_WIDTH            = 64,
-    parameter CHANNEL_WIDTH             = 2,
+    parameter CHANNEL_AMOUNT            = 4,
+    parameter CHANNEL_WIDTH             = $clog2(CHANNEL_AMOUNT),
     parameter CHANNEL_ID                = 2'b00,
     parameter DATA_TYPE_WIDTH           = 2,    // DoubleWord - Word - Byte (-> 3 type)
     parameter BYTE_TYPE_ENCODE          = 0,
     parameter WORD_TYPE_ENCODE          = 1,
     parameter DOUBLEWORD_TYPE_ENCODE    = 2,
     // Device parameter 
+    parameter INTERFACE_MASTER_ENCODE   = 3,
     parameter INTERFACE_DMEM_ENCODE     = 0,
     parameter INTERFACE_PERP_ENCODE     = 1,
     parameter INTERFACE_GPIO_ENCODE     = 2,
     parameter INTERFACE_TYPE            = INTERFACE_PERP_ENCODE,
     parameter DEVICE_DATA_WIDTH         = (INTERFACE_TYPE == INTERFACE_DMEM_ENCODE) ? 64 : 8,
     
+    /* For Master */
+    parameter M_ATI_DATA_WIDTH          = 64,
+    parameter M_ATI_ADDR_WIDTH          = 64,
     /* For Memory */
     parameter INTERFACE_DMEM_THROUGH    = 0,    // 1 - Pass interface through, 0 - Use buffer in Writing Case (Will increase latency - 1cycle)
+    /* For GPIO */
+    parameter PORT_AMOUNT               = 2,
+    parameter PIN_AMOUNT                = 8,
     
     // DEEP CONFIGURATION
     parameter INTERNAL_CLOCK            = 125000000,
@@ -62,6 +70,26 @@ module Atfox_exTensible_Interface
     )
     (
     input                               clk,
+    /*          Master's interface           */
+    output [M_ATI_DATA_WIDTH - 1:0]     m_ati_rdata,
+    input  [M_ATI_DATA_WIDTH - 1:0]     m_ati_wdata,
+    input  [M_ATI_ADDR_WIDTH - 1:0]     m_ati_addr,
+    output                              m_ati_rd_available,
+    output                              m_ati_wr_available,
+    input                               m_ati_rd_req,
+    input                               m_ati_wr_req,
+    input  [DATA_TYPE_WIDTH - 1:0]      m_ati_data_type,
+    /*          Master's stream           */
+    input  [M_ATI_DATA_WIDTH - 1:0]     m_atis_rdata_bus   [0:CHANNEL_AMOUNT - 1],
+    output [M_ATI_DATA_WIDTH - 1:0]     m_atis_wdata_bus,
+    output [M_ATI_ADDR_WIDTH - 1:0]     m_atis_addr_bus,
+    input                               m_atis_rd_available[0:CHANNEL_AMOUNT - 1],
+    input                               m_atis_wr_available[0:CHANNEL_AMOUNT - 1],
+    output                              m_atis_rd_req,
+    output                              m_atis_wr_req,
+    output [DATA_TYPE_WIDTH - 1:0]      m_atis_data_type,
+    
+    /*          Slave's interface           */
     // SYSTEM BUS interface ////////////////////
     // DATA_BUS
     input  [DATA_BUS_WIDTH - 1:0]       data_bus_in,
@@ -81,7 +109,7 @@ module Atfox_exTensible_Interface
     output  logic                       device_rd_ins,
     input                               device_rd_available,    // Buffer of device is available (not full)
     input                               device_wr_available,    // Buffer of device is available (not full)
-    /* For Memory */
+    /* For Memory & GPIO */
     output [ADDR_BUS_WIDTH - 1:0]       device_addr_rd,
     output [ADDR_BUS_WIDTH - 1:0]       device_addr_wr,
     output [DATA_TYPE_WIDTH - 1:0]      device_data_type_rd,      // Doubleword - Word - Byte
@@ -94,11 +122,12 @@ module Atfox_exTensible_Interface
     localparam DOUBLEWORD_WIDTH             = 64;
     
     wire address_decoder = (addr_bus_in[ADDR_BUS_WIDTH - 1: ADDR_BUS_WIDTH - CHANNEL_WIDTH] == CHANNEL_ID);
-    
+    generate
     if(INTERFACE_TYPE == INTERFACE_PERP_ENCODE) begin     : INTERFACE_PERP_BLOCK
     
-    localparam OUT_WORD_BLOCK_STATE         = 0;    
-    localparam IN_WORD_BLOCK_STATE          = 1;   
+    reg rd_device_state;
+    localparam OUT_WORD_BLOCK_STATE         = 1'd0;    
+    localparam IN_WORD_BLOCK_STATE          = 1'd1;   
     
     localparam BLOCK_AMOUNT                 = DATA_BUS_WIDTH / DEVICE_DATA_WIDTH;
     localparam BLOCK_INDEX_WIDTH            = $clog2(BLOCK_AMOUNT);
@@ -135,7 +164,6 @@ module Atfox_exTensible_Interface
     wire                                                valid_word_block_sbuf   [0:WORD_BLOCK_AMOUNT - 1];
     reg                                                 valid_word_block_sbuf_hi[0:WORD_BLOCK_AMOUNT - 1];
     reg                                                 valid_word_block_sbuf_lo[0:WORD_BLOCK_AMOUNT - 1];
-    reg  [1:0]                                          rd_device_state;
     wire [WORD_BLOCK_INDEX_W - 1:0]                     index_word_block_wr_cur;
     wire [WORD_BLOCK_INDEX_W - 1:0]                     index_word_block_wr_next;
     wire [WORD_BLOCK_INDEX_W - 1:0]                     index_word_block_wr_prev;
@@ -456,21 +484,39 @@ module Atfox_exTensible_Interface
     end 
     
     else if(INTERFACE_TYPE == INTERFACE_GPIO_ENCODE) begin  : GPIO_BLOCK
-        assign data_bus_out         = (address_decoder) ? device_data_in : {DATA_BUS_WIDTH{1'bz}};
+
+        localparam ADDR_PORT_WIDTH = $clog2(PORT_AMOUNT);
+        
+        assign data_bus_out         = (address_decoder) ? {{(DATA_BUS_WIDTH - DEVICE_DATA_WIDTH){1'b0}}, device_data_in} : {DATA_BUS_WIDTH{1'bz}};
         assign device_addr_rd       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
-        assign buffer_rd_available  = 1'b1;
-        assign buffer_wr_available  = 1'b1;
-        assign device_addr_wr       = 0;
-        assign device_rd_ins        = 0;
-        assign device_wr_ins        = 0;
-        assign device_data_type     = 0;
-        assign device_data_out      = 0;
+        assign device_addr_wr       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
+        assign buffer_rd_available  = (address_decoder) ? device_rd_available : {1{1'bz}};
+        assign buffer_wr_available  = (address_decoder) ? device_wr_available : {1{1'bz}};
+        assign device_rd_ins        = (address_decoder) ? rd_req : 1'b0;
+        assign device_wr_ins        = (address_decoder) ? wr_req : 1'b0;
+        assign device_data_out      =  data_bus_in[DEVICE_DATA_WIDTH - 1:0];
+        assign device_data_type     = 0;    // Only-Byte
     end 
+    
+    else if(INTERFACE_TYPE == INTERFACE_MASTER_ENCODE) begin  : MASTER_BLOCK
+        wire[CHANNEL_WIDTH - 1:0] channel_decode;
+        assign channel_decode       = m_ati_addr[M_ATI_ADDR_WIDTH - 1:M_ATI_ADDR_WIDTH - CHANNEL_WIDTH];
+        assign m_ati_rdata          = m_atis_rdata_bus[channel_decode];
+        assign m_ati_rd_available   = m_atis_rd_available[channel_decode];
+        assign m_ati_wr_available   = m_atis_wr_available[channel_decode];
+        
+        assign m_atis_wdata_bus     = m_ati_wdata;
+        assign m_atis_addr_bus      = m_ati_addr;
+        assign m_atis_rd_req        = m_ati_rd_req;
+        assign m_atis_wr_req        = m_ati_wr_req;
+        assign m_atis_data_type     = m_ati_data_type;
+    end
+    endgenerate
 endmodule
 // 
 //  Atfox_exTensible_Interface
 //        #(
-//        .DEVICE_CHANNEL_ID(),
+//        .CHANNEL_ID(),
 //        .INTERFACE_DMEM_ENCODE(INTERFACE_DMEM_ENCODE),
 //        .INTERFACE_PERP_ENCODE(INTERFACE_PERP_ENCODE),
 //        .INTERFACE_GPIO_ENCODE(INTERFACE_GPIO_ENCODE),

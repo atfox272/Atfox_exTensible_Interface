@@ -2,3 +2,6 @@ Running: xsim.dir/ATI_tb_behav/xsimk.exe -simmode gui -wdb ATI_tb_behav.wdb -sim
 Design successfully loaded
 Design Loading Memory Usage: 8864 KB (Peak: 8864 KB)
 Design Loading CPU Usage: 15 ms
+Simulation completed
+Simulation Memory Usage: 17744 KB (Peak: 17744 KB)
+Simulation CPU Usage: 343 ms
