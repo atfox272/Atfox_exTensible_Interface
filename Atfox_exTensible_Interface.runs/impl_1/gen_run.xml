@@ -15,6 +15,7 @@
   <File Type="BITSTR-SYSDEF" Name="Atfox_exTensible_Interface.sysdef"/>
   <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
   <File Type="BITSTR-LTX" Name="Atfox_exTensible_Interface.ltx"/>
+  <File Type="RCFI_FILE" Name="Atfox_exTensible_Interface.rcfi"/>
   <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
   <File Type="OPT-DRC" Name="Atfox_exTensible_Interface_drc_opted.rpt"/>
   <File Type="OPT-HWDEF" Name="Atfox_exTensible_Interface.hwdef"/>
@@ -31,7 +32,6 @@
   <File Type="POSTROUTE-PHYSOPT-DCP" Name="Atfox_exTensible_Interface_postroute_physopt.dcp"/>
   <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="Atfox_exTensible_Interface_postroute_physopt_bb.dcp"/>
   <File Type="PDI-FILE" Name="Atfox_exTensible_Interface.pdi"/>
-  <File Type="RCFI_FILE" Name="Atfox_exTensible_Interface.rcfi"/>
   <File Type="CFI_FILE" Name="Atfox_exTensible_Interface.cfi"/>
   <File Type="RNPI_FILE" Name="Atfox_exTensible_Interface.rnpi"/>
   <File Type="NPI_FILE" Name="Atfox_exTensible_Interface.npi"/>

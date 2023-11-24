@@ -21,7 +21,7 @@
 // ADDRESS_BUS format
 // <CHANNEL_ID> - <ADDRESS_ID>
 // Note:
-//  - LOAD_TYPE:    + BYTE*         -> invalid (align to WORD automatically) (cause segmentation in buffer)
+//  - LOAD_TYPE:    + BYTE*         -> invalid (align to WORD automatically) (cause segmentation in buffer) (Only peripheral-type)
 //                  + WORD          -> valid     
 //                  + DOUBLE_WORD   -> valid
 //
@@ -48,14 +48,17 @@ module Atfox_exTensible_Interface
     parameter INTERFACE_PERP_ENCODE     = 1,
     parameter INTERFACE_GPIO_ENCODE     = 2,
     parameter INTERFACE_TYPE            = INTERFACE_PERP_ENCODE,
-    parameter DEVICE_DATA_WIDTH         = (INTERFACE_TYPE == INTERFACE_DMEM_ENCODE) ? 64 : 8,
+//    parameter DEVICE_DATA_WIDTH         = (INTERFACE_TYPE == INTERFACE_DMEM_ENCODE) ? 64 : 8,
     
     /* For Master */
     parameter M_ATI_DATA_WIDTH          = 64,
     parameter M_ATI_ADDR_WIDTH          = 64,
-    /* For Memory */
+    /* For Slave */
+    parameter S_ATI_DATA_WIDTH          = (INTERFACE_TYPE == INTERFACE_DMEM_ENCODE) ? 64 : 8,
+    parameter S_ATI_ADDR_WIDTH          = 64,
+    /* Only Memory */
     parameter INTERFACE_DMEM_THROUGH    = 0,    // 1 - Pass interface through, 0 - Use buffer in Writing Case (Will increase latency - 1cycle)
-    /* For GPIO */
+    /* Only GPIO */
     parameter PORT_AMOUNT               = 2,
     parameter PIN_AMOUNT                = 8,
     
@@ -79,41 +82,59 @@ module Atfox_exTensible_Interface
     input                               m_ati_rd_req,
     input                               m_ati_wr_req,
     input  [DATA_TYPE_WIDTH - 1:0]      m_ati_data_type,
-    /*          Master's stream           */
-    input  [M_ATI_DATA_WIDTH - 1:0]     m_atis_rdata_bus   [0:CHANNEL_AMOUNT - 1],
-    output [M_ATI_DATA_WIDTH - 1:0]     m_atis_wdata_bus,
-    output [M_ATI_ADDR_WIDTH - 1:0]     m_atis_addr_bus,
+    /*            Master's stream           */
+    input  [DATA_BUS_WIDTH - 1:0]       m_atis_rdata_bus   [0:CHANNEL_AMOUNT - 1],
+    output [DATA_BUS_WIDTH - 1:0]       m_atis_wdata_bus,
+    output [ADDR_BUS_WIDTH - 1:0]       m_atis_addr_bus,
     input                               m_atis_rd_available[0:CHANNEL_AMOUNT - 1],
     input                               m_atis_wr_available[0:CHANNEL_AMOUNT - 1],
     output                              m_atis_rd_req,
     output                              m_atis_wr_req,
     output [DATA_TYPE_WIDTH - 1:0]      m_atis_data_type,
-    
     /*          Slave's interface           */
+    input  [S_ATI_DATA_WIDTH - 1:0]     s_ati_rdata,
+    output [S_ATI_DATA_WIDTH - 1:0]     s_ati_wdata,
+    output [S_ATI_ADDR_WIDTH - 1:0]     s_ati_raddr,
+    output [S_ATI_ADDR_WIDTH - 1:0]     s_ati_waddr,
+    input                               s_ati_rd_available,
+    input                               s_ati_wr_available,
+    output reg                          s_ati_rd_req,
+    output reg                          s_ati_wr_req,
+    output [DATA_TYPE_WIDTH - 1:0]      s_ati_rdata_type,
+    output [DATA_TYPE_WIDTH - 1:0]      s_ati_wdata_type,
+    /*            Slave's stream            */
+    output [DATA_BUS_WIDTH - 1:0]       s_atis_rdata,
+    input  [DATA_BUS_WIDTH - 1:0]       s_atis_wdata,
+    input  [ADDR_BUS_WIDTH - 1:0]       s_atis_addr,
+    output                              s_atis_rd_available,
+    output                              s_atis_wr_available,
+    input                               s_atis_rd_req,
+    input                               s_atis_wr_req,
+    input  [DATA_TYPE_WIDTH - 1:0]      s_atis_data_type,
     // SYSTEM BUS interface ////////////////////
     // DATA_BUS
-    input  [DATA_BUS_WIDTH - 1:0]       data_bus_in,
-    inout  [DATA_BUS_WIDTH - 1:0]       data_bus_out,
+//    input  [DATA_BUS_WIDTH - 1:0]       data_bus_in,
+//    inout  [DATA_BUS_WIDTH - 1:0]       data_bus_out,
     // ADDRESS_BUS
-    input  [ADDR_BUS_WIDTH - 1:0]       addr_bus_in,
+//    input  [ADDR_BUS_WIDTH - 1:0]       addr_bus_in,
     // CONTROL_BUS
-    inout                               buffer_rd_available,
-    inout                               buffer_wr_available,
-    input                               rd_req,
-    input                               wr_req,
-    input  [DATA_TYPE_WIDTH - 1:0]      data_type_encode,      // Doubleword - Word - Byte
+//    inout                               buffer_rd_available,
+//    inout                               buffer_wr_available,
+//    input                               rd_req,
+//    input                               wr_req,
+//    input  [DATA_TYPE_WIDTH - 1:0]      data_type_encode,      // Doubleword - Word - Byte
     // DEVICE interface ////////////////////////
-    input  [DEVICE_DATA_WIDTH - 1:0]    device_data_in,
-    output [DEVICE_DATA_WIDTH - 1:0]    device_data_out,
-    output  logic                       device_wr_ins,
-    output  logic                       device_rd_ins,
-    input                               device_rd_available,    // Buffer of device is available (not full)
-    input                               device_wr_available,    // Buffer of device is available (not full)
+//    input  [DEVICE_DATA_WIDTH - 1:0]    device_data_in,
+//    output [DEVICE_DATA_WIDTH - 1:0]    device_data_out,
+//    output  logic                       device_wr_ins,
+//    output  logic                       device_rd_ins,
+//    input                               device_rd_available,    // Buffer of device is available (not full)
+//    input                               device_wr_available,    // Buffer of device is available (not full)
     /* For Memory & GPIO */
-    output [ADDR_BUS_WIDTH - 1:0]       device_addr_rd,
-    output [ADDR_BUS_WIDTH - 1:0]       device_addr_wr,
-    output [DATA_TYPE_WIDTH - 1:0]      device_data_type_rd,      // Doubleword - Word - Byte
-    output [DATA_TYPE_WIDTH - 1:0]      device_data_type_wr,      // Doubleword - Word - Byte
+//    output [ADDR_BUS_WIDTH - 1:0]       device_addr_rd,
+//    output [ADDR_BUS_WIDTH - 1:0]       device_addr_wr,
+//    output [DATA_TYPE_WIDTH - 1:0]      device_data_type_rd,      // Doubleword - Word - Byte
+//    output [DATA_TYPE_WIDTH - 1:0]      device_data_type_wr,      // Doubleword - Word - Byte
     input                               rst_n
     );
     
@@ -121,7 +142,7 @@ module Atfox_exTensible_Interface
     localparam WORD_WIDTH                   = 32;
     localparam DOUBLEWORD_WIDTH             = 64;
     
-    wire address_decoder = (addr_bus_in[ADDR_BUS_WIDTH - 1: ADDR_BUS_WIDTH - CHANNEL_WIDTH] == CHANNEL_ID);
+    wire address_decoder = (s_atis_addr[ADDR_BUS_WIDTH - 1: ADDR_BUS_WIDTH - CHANNEL_WIDTH] == CHANNEL_ID);
     generate
     if(INTERFACE_TYPE == INTERFACE_PERP_ENCODE) begin     : INTERFACE_PERP_BLOCK
     
@@ -129,7 +150,7 @@ module Atfox_exTensible_Interface
     localparam OUT_WORD_BLOCK_STATE         = 1'd0;    
     localparam IN_WORD_BLOCK_STATE          = 1'd1;   
     
-    localparam BLOCK_AMOUNT                 = DATA_BUS_WIDTH / DEVICE_DATA_WIDTH;
+    localparam BLOCK_AMOUNT                 = DATA_BUS_WIDTH / S_ATI_DATA_WIDTH;
     localparam BLOCK_INDEX_WIDTH            = $clog2(BLOCK_AMOUNT);
     
     localparam WORD_BLOCK_SIZE_BYTE         = (WORD_WIDTH / BYTE_WIDTH);    // 4
@@ -144,7 +165,7 @@ module Atfox_exTensible_Interface
     reg [POINTER_MASTER_BUF - 1:0]      front_pointer_mbuf;
     reg [POINTER_MASTER_BUF - 1:0]      rear_pointer_mbuf;
     
-    reg [DEVICE_DATA_WIDTH - 1:0]       slave_buffer  [0:SLAVE_BUFFER_SIZE - 1];
+    reg [S_ATI_DATA_WIDTH - 1:0]        slave_buffer  [0:SLAVE_BUFFER_SIZE - 1];
     reg [DATA_TYPE_WIDTH - 1:0]         data_type_sbuf[0:SLAVE_BUFFER_SIZE - 1];    // data_type of element in slave_buffer
     reg [POINTER_SLAVE_BUF - 1:0]       front_pointer_sbuf;
     reg [POINTER_SLAVE_BUF - 1:0]       rear_pointer_sbuf;
@@ -156,7 +177,7 @@ module Atfox_exTensible_Interface
     wire                                empty_mbuf;
     wire                                full_sbuf;
     wire                                empty_sbuf;
-    logic[DATA_BUS_WIDTH - 1:0]         data_bus_out_buf;
+    logic[DATA_BUS_WIDTH - 1:0]         s_atis_rdata_buf;
     
     
     wire [WORD_WIDTH - 1:0]                             word_block_sbuf         [0:WORD_BLOCK_AMOUNT - 1];
@@ -195,11 +216,11 @@ module Atfox_exTensible_Interface
         );
     
     // Address decoder   
-    assign data_bus_out         = (address_decoder) ? data_bus_out_buf  : {64{1'bz}};
-    assign buffer_wr_available  = (address_decoder) ? ~full_mbuf        : {1{1'bz}};
-    assign buffer_rd_available  = (address_decoder) ? buffer_rd_valid   : {1{1'bz}};
-    assign wr_req_decode        = (address_decoder) ? wr_req : 1'b0;
-    assign rd_req_decode        = (address_decoder) ? rd_req : 1'b0;
+    assign s_atis_rdata         = s_atis_rdata_buf;
+    assign s_atis_wr_available  = ~full_mbuf;
+    assign s_atis_rd_available  = buffer_rd_valid;
+    assign wr_req_decode        = (address_decoder) ? s_atis_wr_req : 1'b0;
+    assign rd_req_decode        = (address_decoder) ? s_atis_rd_req : 1'b0;
     
     assign full_mbuf = (rear_pointer_mbuf + 1) == front_pointer_mbuf;
     assign empty_mbuf= rear_pointer_mbuf == front_pointer_mbuf;
@@ -209,19 +230,19 @@ module Atfox_exTensible_Interface
             rear_pointer_mbuf <= 0;
         end 
         else if(wr_req_decode) begin
-            master_buffer[rear_pointer_mbuf] <= data_bus_in;
-            data_type_mbuf[rear_pointer_mbuf] <= data_type_encode;
+            master_buffer[rear_pointer_mbuf] <= s_atis_wdata;
+            data_type_mbuf[rear_pointer_mbuf] <= s_atis_data_type;
             rear_pointer_mbuf <= rear_pointer_mbuf + 1;
         end
     end
     
-    logic[DEVICE_DATA_WIDTH - 1:0]      block_mux;
+    logic[S_ATI_DATA_WIDTH - 1:0]       block_mux;
     reg  [BLOCK_INDEX_WIDTH - 1:0]      block_index;
     logic[BLOCK_INDEX_WIDTH - 1:0]      block_index_limit;  // 1 - 4 - 8 bytes 
     wire [DATA_BUS_WIDTH - 1:0]         front_element_mbuf;
     
     assign front_element_mbuf = master_buffer[front_pointer_mbuf];
-    assign device_data_out = block_mux;
+    assign s_ati_wdata = block_mux;
     always_comb begin
     
     case(block_index)
@@ -256,10 +277,10 @@ module Atfox_exTensible_Interface
         if(!rst_n) begin
             front_pointer_mbuf <= 0;
             block_index <= 0;
-            device_wr_ins <= 0; // Sample tp "block_mux" directly
+            s_ati_wr_req <= 0; // Sample tp "block_mux" directly
         end
-        else if(~empty_mbuf & device_wr_available) begin
-            if(device_wr_ins) begin                 // Load 
+        else if(~empty_mbuf & s_ati_wr_available) begin
+            if(s_ati_wr_req) begin                 // Load 
                 if(block_index == block_index_limit) begin
                     block_index <= 0;
                     front_pointer_mbuf <= front_pointer_mbuf + 1;
@@ -271,7 +292,7 @@ module Atfox_exTensible_Interface
             else begin                              // Sample
             
             end
-            device_wr_ins <= ~device_wr_ins;
+            s_ati_wr_req <= ~s_ati_wr_req;
         end 
     end
     
@@ -351,7 +372,7 @@ module Atfox_exTensible_Interface
     always @(posedge clk) begin
         if(!rst_n) begin
             rear_pointer_sbuf <= 1;
-            device_rd_ins <= 0;
+            s_ati_rd_req <= 0;
             word_block_timeout_en <= 0;
             for(int i = 0; i < WORD_BLOCK_AMOUNT; i = i + 1) begin
             valid_word_block_sbuf_hi[i] <= 1'b0;
@@ -363,21 +384,21 @@ module Atfox_exTensible_Interface
             case(rd_device_state) 
                 OUT_WORD_BLOCK_STATE: begin
                     word_block_timeout_en <= 0;
-                    if(device_rd_available & !full_sbuf) begin
+                    if(s_ati_rd_available & !full_sbuf) begin
                         rd_device_state <= IN_WORD_BLOCK_STATE;
                         amt_word_block_sbuf[index_word_block_wr_cur] <= 0; 
                     end
                 end 
                 IN_WORD_BLOCK_STATE: begin
-                    if(device_rd_available) begin
-                        if(device_rd_ins) begin
+                    if(s_ati_rd_available) begin
+                        if(s_ati_rd_req) begin
                             rear_pointer_sbuf <= rear_pointer_sbuf + 1;
-                            device_rd_ins <= 0;
+                            s_ati_rd_req <= 0;
                         end 
                         else begin
-                            slave_buffer[rear_pointer_sbuf] <= device_data_in;
+                            slave_buffer[rear_pointer_sbuf] <= s_ati_rdata;
                             amt_word_block_sbuf[index_word_block_wr_cur] <= amt_word_block_sbuf[index_word_block_wr_cur] + 1; 
-                            device_rd_ins <= 1;
+                            s_ati_rd_req <= 1;
                         end 
                     end 
                     else if (full_word_block_wr) begin
@@ -390,7 +411,7 @@ module Atfox_exTensible_Interface
                         rear_pointer_sbuf <= {index_word_block_wr_next, offset_word_block};
                         valid_word_block_sbuf_hi[index_word_block_wr_cur] <= ~valid_word_block_sbuf_lo[index_word_block_wr_cur];
                     end  
-                    word_block_timeout_en <= (word_block_timeout_flag | full_word_block_wr) ? 0 : !device_rd_available;
+                    word_block_timeout_en <= (word_block_timeout_flag | full_word_block_wr) ? 0 : !s_ati_rd_available;
                 end 
                 
             endcase 
@@ -411,7 +432,7 @@ module Atfox_exTensible_Interface
             valid_word_block_sbuf_lo[i] <= 1'b0;
         end
         else if(rd_req_decode & buffer_rd_valid) begin
-            if(((data_type_encode == BYTE_TYPE_ENCODE | data_type_encode == WORD_TYPE_ENCODE) & index_word_block_rd_cur == i) | data_type_encode == DOUBLEWORD_TYPE_ENCODE & (index_word_block_rd_next == i)) begin
+            if(((s_atis_data_type == BYTE_TYPE_ENCODE | s_atis_data_type == WORD_TYPE_ENCODE) & index_word_block_rd_cur == i) | s_atis_data_type == DOUBLEWORD_TYPE_ENCODE & (index_word_block_rd_next == i)) begin
                 valid_word_block_sbuf_lo[i] <= valid_word_block_sbuf_hi[i];
             end
         end
@@ -422,25 +443,25 @@ module Atfox_exTensible_Interface
     buffer_rd_valid_word    = valid_word_block_sbuf[index_word_block_rd_cur];
     buffer_rd_valid_dword   = buffer_rd_valid_word & valid_word_block_sbuf[index_word_block_rd_next];
     
-    case(data_type_encode)
+    case(s_atis_data_type)
         BYTE_TYPE_ENCODE: begin
             buffer_rd_valid = buffer_rd_valid_word;
-            data_bus_out_buf = {{(DOUBLEWORD_WIDTH - WORD_WIDTH){1'b0}}, word_block_sbuf[index_word_block_rd_cur]};
+            s_atis_rdata_buf = {{(DOUBLEWORD_WIDTH - WORD_WIDTH){1'b0}}, word_block_sbuf[index_word_block_rd_cur]};
             front_pointer_sbuf_next = {index_word_block_rd_next, offset_word_block};
         end
         WORD_TYPE_ENCODE: begin
             buffer_rd_valid = buffer_rd_valid_word;
-            data_bus_out_buf = {{(DOUBLEWORD_WIDTH - WORD_WIDTH){1'b0}}, word_block_sbuf[index_word_block_rd_cur]};
+            s_atis_rdata_buf = {{(DOUBLEWORD_WIDTH - WORD_WIDTH){1'b0}}, word_block_sbuf[index_word_block_rd_cur]};
             front_pointer_sbuf_next = {index_word_block_rd_next, offset_word_block};
         end
         DOUBLEWORD_TYPE_ENCODE: begin
-            data_bus_out_buf = {dword_block_sbuf[index_word_block_rd_cur]};
+            s_atis_rdata_buf = {dword_block_sbuf[index_word_block_rd_cur]};
             buffer_rd_valid = buffer_rd_valid_dword;
             front_pointer_sbuf_next = {index_word_block_rd_next + 1, offset_word_block};
         end
         default: begin
             buffer_rd_valid = 1'b0;
-            data_bus_out_buf = {{(DOUBLEWORD_WIDTH - WORD_WIDTH){1'b0}}, word_block_sbuf[index_word_block_rd_cur]};
+            s_atis_rdata_buf = {{(DOUBLEWORD_WIDTH - WORD_WIDTH){1'b0}}, word_block_sbuf[index_word_block_rd_cur]};
             front_pointer_sbuf_next = {index_word_block_rd_next, offset_word_block};
         end
     endcase
@@ -450,36 +471,34 @@ module Atfox_exTensible_Interface
     
     else if(INTERFACE_TYPE == INTERFACE_DMEM_ENCODE) begin  : MEMORY_BLOCK
         /* For 1wr-1rd  Memory */
-        
         if(INTERFACE_DMEM_THROUGH == 0) begin
             reg [DATA_BUS_WIDTH - 1:0]  data_bus_wr_buffer;
-            reg [DATA_TYPE_WIDTH - 1:0] device_data_type_wr_buffer;
+            reg [DATA_TYPE_WIDTH - 1:0] s_ati_wdata_type_buffer;
             always @(posedge clk) begin
                 if(!rst_n) begin
                     data_bus_wr_buffer <= 0;
-                    device_data_type_wr_buffer <= 0;
+                    s_ati_wdata_type_buffer <= 0;
                 end
-                else if(device_wr_ins) begin
-                    data_bus_wr_buffer <= data_bus_in;
-                    device_data_type_wr_buffer <= data_type_encode;
+                else if(s_ati_wr_req) begin
+                    data_bus_wr_buffer <= s_atis_wdata;
+                    s_ati_wdata_type_buffer <= s_atis_data_type;
                 end
             end
-            assign device_data_out      = data_bus_wr_buffer;
-            assign device_data_type_wr  = device_data_type_wr_buffer;
+            assign s_ati_wdata          = data_bus_wr_buffer[S_ATI_DATA_WIDTH - 1:0];
+            assign s_ati_wdata_type     = s_ati_wdata_type_buffer;
         end
         else begin
-            assign device_data_out      = data_bus_in;
-            assign device_data_type_wr  = data_type_encode;
+            assign s_ati_wdata          = s_atis_wdata[S_ATI_DATA_WIDTH - 1:0];
+            assign s_ati_wdata_type  = s_atis_data_type;
         end
-        
-        assign data_bus_out         = (address_decoder) ? device_data_in : {DATA_BUS_WIDTH{1'bz}};
-        assign buffer_rd_available  = (address_decoder) ? device_rd_available : {1{1'bz}};
-        assign buffer_wr_available  = (address_decoder) ? device_wr_available : {1{1'bz}};
-        assign device_addr_rd       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
-        assign device_addr_wr       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
-        assign device_rd_ins        = (address_decoder) ? rd_req : 1'b0;
-        assign device_wr_ins        = (address_decoder) ? wr_req : 1'b0;
-        assign device_data_type_rd  = data_type_encode;
+        assign s_atis_rdata         = {{(DATA_BUS_WIDTH - S_ATI_DATA_WIDTH){1'b0}}, s_ati_rdata};
+        assign s_atis_rd_available  = s_ati_rd_available;
+        assign s_atis_wr_available  = s_ati_wr_available;
+        assign s_ati_raddr          = (address_decoder) ? s_atis_addr[S_ATI_ADDR_WIDTH - 1:0] : {ADDR_BUS_WIDTH{1'b0}};
+        assign s_ati_waddr          = (address_decoder) ? s_atis_addr[S_ATI_ADDR_WIDTH - 1:0] : {ADDR_BUS_WIDTH{1'b0}};
+        assign s_ati_rd_req         = (address_decoder) ? s_atis_rd_req : 1'b0;
+        assign s_ati_wr_req         = (address_decoder) ? s_atis_wr_req : 1'b0;
+        assign s_ati_rdata_type     = s_atis_data_type;
         
     end 
     
@@ -487,15 +506,16 @@ module Atfox_exTensible_Interface
 
         localparam ADDR_PORT_WIDTH = $clog2(PORT_AMOUNT);
         
-        assign data_bus_out         = (address_decoder) ? {{(DATA_BUS_WIDTH - DEVICE_DATA_WIDTH){1'b0}}, device_data_in} : {DATA_BUS_WIDTH{1'bz}};
-        assign device_addr_rd       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
-        assign device_addr_wr       = (address_decoder) ? addr_bus_in : {ADDR_BUS_WIDTH{1'b0}};
-        assign buffer_rd_available  = (address_decoder) ? device_rd_available : {1{1'bz}};
-        assign buffer_wr_available  = (address_decoder) ? device_wr_available : {1{1'bz}};
-        assign device_rd_ins        = (address_decoder) ? rd_req : 1'b0;
-        assign device_wr_ins        = (address_decoder) ? wr_req : 1'b0;
-        assign device_data_out      =  data_bus_in[DEVICE_DATA_WIDTH - 1:0];
-        assign device_data_type     = 0;    // Only-Byte
+        assign s_atis_rdata         = {{(DATA_BUS_WIDTH - S_ATI_DATA_WIDTH){1'b0}}, s_ati_rdata};
+        assign s_ati_raddr          = (address_decoder) ? s_atis_addr[S_ATI_ADDR_WIDTH - 1:0] : {ADDR_BUS_WIDTH{1'b0}};
+        assign s_ati_waddr          = (address_decoder) ? s_atis_addr[S_ATI_ADDR_WIDTH - 1:0] : {ADDR_BUS_WIDTH{1'b0}};
+        assign s_atis_rd_available  = s_ati_rd_available;
+        assign s_atis_wr_available  = s_ati_wr_available;
+        assign s_ati_rd_req         = (address_decoder) ? s_atis_rd_req : 1'b0;
+        assign s_ati_wr_req         = (address_decoder) ? s_atis_wr_req : 1'b0;
+        assign s_ati_wdata          = s_atis_wdata[S_ATI_DATA_WIDTH - 1:0];
+        assign s_ati_rdata_type     = 0;    // Only-Byte
+        assign s_ati_rdata_type     = 0;    // Only-Byte
     end 
     
     else if(INTERFACE_TYPE == INTERFACE_MASTER_ENCODE) begin  : MASTER_BLOCK
@@ -517,29 +537,46 @@ endmodule
 //  Atfox_exTensible_Interface
 //        #(
 //        .CHANNEL_ID(),
+//        .INTERFACE_MASTER_ENCODE(INTERFACE_MASTER_ENCODE),
 //        .INTERFACE_DMEM_ENCODE(INTERFACE_DMEM_ENCODE),
 //        .INTERFACE_PERP_ENCODE(INTERFACE_PERP_ENCODE),
 //        .INTERFACE_GPIO_ENCODE(INTERFACE_GPIO_ENCODE),
 //        .INTERFACE_TYPE()
 //        ) Atfox_exTensible_Interface_UART (
 //        .clk(clk),
-//        .data_bus_in(),
-//        .data_bus_out(),
-//        .addr_bus_in(),
-//        .buffer_rd_available(),
-//        .buffer_wr_available(),
-//        .rd_req(),
-//        .wr_req(),
-//        .data_type_encode(),
-//        .device_data_in(),
-//        .device_data_out(),
-//        .device_wr_ins(),
-//        .device_rd_ins(),
-//        .device_rd_available(),
-//        .device_wr_available(),
-//        .device_addr_rd(),
-//        .device_addr_wr(),
-//        .device_data_type_rd(),
-//        .device_data_type_wr(),
+//        .m_ati_rdata(),
+//        .m_ati_wdata(),
+//        .m_ati_addr(),
+//        .m_ati_rd_available(),
+//        .m_ati_wr_available(),
+//        .m_ati_rd_req(),
+//        .m_ati_wr_req(),
+//        .m_ati_data_type(),
+//        .m_atis_rdata_bus(),
+//        .m_atis_wdata_bus(),
+//        .m_atis_addr_bus(),
+//        .m_atis_rd_available(),
+//        .m_atis_wr_available(),
+//        .m_atis_rd_req(),
+//        .m_atis_wr_req(),
+//        .m_atis_data_type(),
+//        .s_atis_wdata(),
+//        .s_atis_rdata(),
+//        .s_atis_addr(),
+//        .s_atis_rd_available(),
+//        .s_atis_wr_available(),
+//        .s_atis_rd_req(),
+//        .s_atis_wr_req(),
+//        .s_atis_data_type(),
+//        .s_ati_rdata(),
+//        .s_ati_wdata(),
+//        .s_ati_wr_req(),
+//        .s_ati_rd_req(),
+//        .s_ati_rd_available(),
+//        .s_ati_wr_available(),
+//        .s_ati_raddr(),
+//        .s_ati_waddr(),
+//        .s_ati_rdata_type(),
+//        .s_ati_wdata_type(),
 //        .rst_n(rst_n)
 //        );
